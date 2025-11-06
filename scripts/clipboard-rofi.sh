@@ -5,6 +5,7 @@
 # and copies the selected item back to the Wayland clipboard using wl-copy.
 
 CLIPBOARD_FILE="$HOME/clipboard.txt"
+MATRIX_THEME="$HOME/.config/rofi/matrix-clipboard.rasi"
 
 if [ ! -f "$CLIPBOARD_FILE" ] || [ ! -s "$CLIPBOARD_FILE" ]; then
     notify-send "Clipboard" "No clipboard history yet"
@@ -29,10 +30,15 @@ if [ -z "$entries" ]; then
     exit 0
 fi
 
-# Show entries in rofi dmenu. Use -no-config for speed and set lines based on count.
+# Show entries in rofi dmenu with matrix theme
 count=$(echo "$entries" | wc -l)
-lines=$(( count < 10 ? count : 10 ))
-chosen=$(echo "$entries" | rofi -dmenu -i -p "Clipboard" -lines "$lines" -no-config)
+lines=$(( count < 12 ? count : 12 ))
+
+if [ -f "$MATRIX_THEME" ]; then
+    chosen=$(echo "$entries" | rofi -dmenu -i -p "Clipboard" -theme "$MATRIX_THEME")
+else
+    chosen=$(echo "$entries" | rofi -dmenu -i -p "Clipboard" -lines "$lines")
+fi
 
 if [ -n "$chosen" ]; then
     # Copy chosen text to Wayland clipboard

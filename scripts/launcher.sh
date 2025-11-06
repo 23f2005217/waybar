@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 
-# Fast rofi launcher (toggle behavior)
-# - If rofi is already running, kill it (toggle)
-# - Otherwise exec rofi in drun mode. Using -no-config reduces startup time.
+# Matrix-themed rofi launcher (toggle behavior)
+MATRIX_THEME="$HOME/.config/rofi/matrix-launcher.rasi"
 
 if pgrep -x "rofi" > /dev/null; then
     pkill -x rofi
 else
-    exec rofi -show drun -no-config
+    if [ -f "$MATRIX_THEME" ]; then
+        exec rofi -show drun -theme "$MATRIX_THEME"
+    else
+        exec rofi -show drun -no-config
+    fi
 fi
