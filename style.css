@@ -1,0 +1,188 @@
+* {
+  font-family: JetBrainsMono;
+  padding: 1px 4px;
+  color: white; 
+}
+
+window#waybar {
+  font-size: 14px;
+  color: white;
+  font-weight: normal;
+  background: transparent;
+  border-radius: 40px;
+}
+
+window#waybar.hidden {
+  opacity: 0.2;
+}
+
+#battery,
+#clock, 
+#cpu,
+#disk,
+#memory,
+#network,
+#pulseaudio,
+#mpd,
+#custom-launcher,
+#temperature,
+#custom-power,
+#custom-clipboard {
+  color: white;
+  background-color: #24283b;
+  border-radius: 20px;
+  margin: 1px 9px;
+}
+
+label:focus {
+  background-color: #000;
+}
+
+#battery.warning.charging *{
+  color: white;
+}
+
+#battery.critical *{
+  color: #e06c75;
+}
+
+#tags button {
+  background-color: #24283b;
+  color: white;
+  border-radius: 15px;
+  margin: 0 3px;
+}
+
+#tags button.occupied {
+  margin: 0 3px;
+  background-color: #194aac;
+}
+
+#tags button.focused {
+  color: #000;
+  margin: 0 3px;
+  background-color: white;
+}
+
+#tags button.urgent{
+  color: red;
+  margin: 0 3px;
+  background-color:white;
+}
+
+/*ANIMATIONS*/
+@keyframes animate {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+/*BORDER RADIUS*/
+#custom-launcher,
+#cpu,
+#disk,
+#memory{
+  border-radius: 3px 10px 3px 10px;
+}
+
+#clock, 
+#network,
+#pulseaudio,
+#custom-power{
+  border-radius: 10px 3px 10px 3px;
+}
+
+#custom-launcher , #custom-power {
+  color: red;
+  font-size: 15px;
+}
+
+#cpu, #clock {
+  background: #6F8FAF;
+}
+
+#memory, #pulseaudio {
+  background: #D70040;
+}
+
+#disk, #network {
+  background: #00A36C;
+}
+
+#battery {
+  background: #F4BB44;
+}
+
+#workspaces {
+  border-radius: 10px;
+  font-size: 15px;
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: animate 21s ease infinite;
+}
+
+#workspaces button {
+  padding: 0 5px;
+  background: transparent;
+  color: white;
+  border: none;
+}
+
+#workspaces button.active {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+}
+
+#workspaces button.urgent {
+  color: #630330;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 5px;
+}
+
+#idle_inhibitor {
+    padding: 0px;
+}
+
+#custom-media {
+  background: #24283b;
+  color: white;
+  border-radius: 20px;
+  padding: 0 10px;
+  margin: 1px 9px;
+  font-size: 13px;
+}
+
+#custom-media.Playing {
+  background: linear-gradient(90deg, #1DB954, #1ed760);
+  color: white;
+}
+
+#custom-media.Paused {
+  background: #F4BB44;
+  color: #000;
+}
+
+#custom-clipboard {
+  background: #24283b;
+  color: white;
+  border-radius: 20px;
+  padding: 0 10px;
+  margin: 1px 9px;
+  font-size: 13px;
+}
+
+#custom-clipboard.active {
+  background: #89b4fa;
+  color: #1e1e2e;
+}
+
+#custom-clipboard.empty {
+  background: #45475a;
+  color: #6c7086;
+}
