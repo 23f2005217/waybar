@@ -1,10 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Check if wofi is already running
-if pgrep -x "wofi" > /dev/null; then
-    # If wofi is running, kill it (toggle behavior)
-    pkill -x wofi
+# Fast rofi launcher (toggle behavior)
+# - If rofi is already running, kill it (toggle)
+# - Otherwise exec rofi in drun mode. Using -no-config reduces startup time.
+
+if pgrep -x "rofi" > /dev/null; then
+    pkill -x rofi
 else
-    # If not running, start wofi
-    wofi -c ~/.config/wofi/config -I
+    exec rofi -show drun -no-config
 fi
