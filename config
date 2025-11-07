@@ -187,7 +187,7 @@
     },
 
     "custom/launcher": {
-        "format":"",
+        "format":"◉",
         "on-click": "exec ~/.config/waybar/scripts/launcher.sh",
         "tooltip": false
     },
