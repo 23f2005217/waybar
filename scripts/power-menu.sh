@@ -1,16 +1,26 @@
 #!/bin/bash
 
-entries="⏻  Shutdown\n  Reboot\n  Suspend\n  Logout"
+# Matrix-themed power menu options
+option1="⏻  Shutdown"
+option2="  Reboot"
+option3="  Suspend"
+option4="  Logout"
 
-selected=$(echo -e $entries | wofi --show dmenu --conf=$HOME/.config/wofi/config.power --style=$HOME/.config/wofi/style.widgets.css)
+# Rofi command with matrix theme
+selected=$(printf "%s\n%s\n%s\n%s\n" "$option1" "$option2" "$option3" "$option4" | \
+    rofi -dmenu \
+    -theme ~/.config/rofi/matrix-power.rasi \
+    -mesg ">>> SYSTEM POWER CONTROL <<<" \
+    -p ">" \
+    -i)
 
 case $selected in
-  *Shutdown)
+  "$option1")
     systemctl poweroff -i;;
-  *Reboot)
+  "$option2")
     systemctl reboot;;
-  *Suspend)
+  "$option3")
     systemctl suspend;;
-  *Logout)
+  "$option4")
     hyprctl dispatch exit;;
 esac

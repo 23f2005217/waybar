@@ -1,10 +1,14 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Check if wofi is already running
-if pgrep -x "wofi" > /dev/null; then
-    # If wofi is running, kill it (toggle behavior)
-    pkill -x wofi
+# Matrix-themed rofi launcher (toggle behavior)
+MATRIX_THEME="$HOME/.config/rofi/matrix-launcher.rasi"
+
+if pgrep -x "rofi" > /dev/null; then
+    pkill -x rofi
 else
-    # If not running, start wofi
-    wofi -c ~/.config/wofi/config -I
+    if [ -f "$MATRIX_THEME" ]; then
+        exec rofi -show drun -theme "$MATRIX_THEME"
+    else
+        exec rofi -show drun -no-config
+    fi
 fi
