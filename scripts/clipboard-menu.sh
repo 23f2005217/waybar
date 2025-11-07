@@ -9,42 +9,38 @@ if [ ! -f "$CLIPBOARD_FILE" ] || [ ! -s "$CLIPBOARD_FILE" ]; then
     exit 0
 fi
 
-# Show clipboard history in a terminal
-kitty --title "Clipboard History" -e less "$CLIPBOARD_FILE"
+# Build a list of entries. Records are separated by blank lines; remove timestamp lines
+# and collapse multi-line entries into single-line previews.
+entries=$(awk 'BEGIN{RS=""; FS="\n"} {
+    s=""
+    for(i=1;i<=NF;i++) if($i !~ /^---/) {
+        gsub(/\n/, " ", $i)
+        if(length($i)>0) s = (s? s " " : "") $i
+    }
+    # trim
+    sub(/^ +/, "", s); sub(/ +$/, "", s)
+    if(length(s)>0) print s
+}' "$CLIPBOARD_FILE")
 
-TOFI_CFG1="$HOME/.config/tofi/small-config"
-TOFI_CFG2="$HOME/.config/tofi/config"
-CLIP_CMD="cliphist list"
-
-# Prefer rofi with matrix theme first
-if command -v rofi >/dev/null 2>&1; then
-	if [ -f "$MATRIX_THEME" ]; then
-		exec bash -lc "$CLIP_CMD | rofi -dmenu -i -theme \"$MATRIX_THEME\" | cliphist decode | wl-copy"
-	else
-		exec bash -lc "$CLIP_CMD | rofi -dmenu -i -p 'Clipboard' | cliphist decode | wl-copy"
-	fi
+if [ -z "$entries" ]; then
+    notify-send "Clipboard" "No clipboard entries"
+    exit 0
 fi
 
-# Fallback to tofi if rofi not available
-if command -v tofi >/dev/null 2>&1; then
-	if [ -f "$TOFI_CFG1" ]; then
-		exec bash -lc "$CLIP_CMD | tofi -c \"$TOFI_CFG1\" | cliphist decode | wl-copy"
-	elif [ -f "$TOFI_CFG2" ]; then
-		exec bash -lc "$CLIP_CMD | tofi -c \"$TOFI_CFG2\" | cliphist decode | wl-copy"
-	else
-		exec bash -lc "$CLIP_CMD | tofi | cliphist decode | wl-copy"
-	fi
+# Show entries in rofi dmenu with matrix theme
+count=$(echo "$entries" | wc -l)
+lines=$(( count < 12 ? count : 12 ))
+
+if [ -f "$MATRIX_THEME" ]; then
+    chosen=$(echo "$entries" | rofi -dmenu -i -p "Clipboard" -theme "$MATRIX_THEME")
+else
+    chosen=$(echo "$entries" | rofi -dmenu -i -p "Clipboard" -lines "$lines")
 fi
 
-# Fallbacks: dmenu, fzf
-if command -v dmenu >/dev/null 2>&1; then
-	exec bash -lc "$CLIP_CMD | dmenu -i -p 'Clipboard' | cliphist decode | wl-copy"
+if [ -n "$chosen" ]; then
+    # Copy chosen text to Wayland clipboard
+    printf "%s" "$chosen" | wl-copy
+    notify-send "Clipboard" "Copied to clipboard"
 fi
 
-if command -v fzf >/dev/null 2>&1; then
-	exec bash -lc "$CLIP_CMD | fzf --reverse | cliphist decode | wl-copy"
-fi
-
-# No chooser found
-echo "No chooser (rofi/tofi/dmenu/fzf) found in PATH" >&2
-exit 1
+exit 0

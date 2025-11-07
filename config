@@ -152,16 +152,9 @@
         "car": "",
         "default": ["", "", ""]
       },
-      "on-click": "kitty alsamixer"
-
-    },
-
-    "custom/weather": {
-        "exec": "~/.config/waybar/scripts/weather.sh",
-        "format": "{text} {icon}",
-        "return-type": "json",
-        "interval": 600,
-        "tooltip-format": "{tooltip}"
+      "on-click": "pavucontrol",
+      "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +5%",
+      "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -5%"
     },
 
     "tray": {
