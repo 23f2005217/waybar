@@ -29,14 +29,14 @@
   font-family: JetBrainsMono;
   padding: 1px 4px;
   color: #00ff00; 
-  text-shadow: 0 0 5px #00ff00;
+  text-shadow: 0 0 5px #ff2600;
 }
 
 window#waybar {
   font-size: 14px;
   color: #00ff00;
   font-weight: bold;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.5);
   border-radius: 0px;
   box-shadow: 0 0 10px #00ff00;
 }

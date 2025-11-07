@@ -1,36 +1,14 @@
 #!/usr/bin/env bash
 
-# Rofi-based clipboard picker
-# Reads $HOME/clipboard.txt (created by clipboard.sh), shows entries in rofi,
-# and copies the selected item back to the Wayland clipboard using wl-copy.
-
-CLIPBOARD_FILE="$HOME/clipboard.txt"
 MATRIX_THEME="$HOME/.config/rofi/matrix-clipboard.rasi"
 
-if [ ! -f "$CLIPBOARD_FILE" ] || [ ! -s "$CLIPBOARD_FILE" ]; then
-    notify-send "Clipboard" "No clipboard history yet"
-    exit 0
-fi
-
-# Build a list of entries. Records are separated by blank lines; remove timestamp lines
-# and collapse multi-line entries into single-line previews.
-entries=$(awk 'BEGIN{RS=""; FS="\n"} {
-    s=""
-    for(i=1;i<=NF;i++) if($i !~ /^---/) {
-        gsub(/\n/, " ", $i)
-        if(length($i)>0) s = (s? s " " : "") $i
-    }
-    # trim
-    sub(/^ +/, "", s); sub(/ +$/, "", s)
-    if(length(s)>0) print s
-}' "$CLIPBOARD_FILE")
+entries=$(cliphist list | awk '{sub(/^[0-9]+ /,""); print}')
 
 if [ -z "$entries" ]; then
     notify-send "Clipboard" "No clipboard entries"
     exit 0
 fi
 
-# Show entries in rofi dmenu with matrix theme
 count=$(echo "$entries" | wc -l)
 lines=$(( count < 12 ? count : 12 ))
 
@@ -41,8 +19,8 @@ else
 fi
 
 if [ -n "$chosen" ]; then
-    # Copy chosen text to Wayland clipboard
-    printf "%s" "$chosen" | wl-copy
+    id=$(cliphist list | grep -n "$chosen" | head -n1 | cut -d: -f1)
+    cliphist decode $id | wl-copy
     notify-send "Clipboard" "Copied to clipboard"
 fi
 

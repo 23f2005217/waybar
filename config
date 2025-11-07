@@ -107,13 +107,6 @@
         "on-click": "kitty -e 'nmtui'"
     },
 
-    "network#vpn": {
-        "interface": "tun0",
-        "format": " {essid} ({signalStrength}%)",
-        "format-disconnected": "⚠ Disconnected",
-        "tooltip-format": "{ifname}: {ipaddr}/{cidr}"
-    },
-
     "hyprland/window": {
         "format": "{}",
         "max-length": 120
@@ -203,7 +196,7 @@
         "format": " {}",
         "return-type": "json",
         "exec": "~/.config/waybar/scripts/clipboard.sh",
-        "on-click": "bash -lc '/home/gir/.config/waybar/scripts/clipboard-menu.sh'",
+        "on-click": "bash -lc '/home/gir/.config/waybar/scripts/clipboard-rofi.sh'",
         "interval": 2,
         "tooltip": true,
         "max-length": 50
